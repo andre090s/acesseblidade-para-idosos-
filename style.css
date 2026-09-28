@@ -1,0 +1,490 @@
+/* ==========================================================================
+
+VARIÁVEIS GLOBAIS E CORES (TEMA PADRÃO)
+========================================================================== */
+:root {
+--cor-fundo: #F4F7F6;
+--fundo-cartao: #FFFFFF;
+--cor-texto: #1A252C;
+--texto-suave: #4A5568;
+--cor-primaria: #0277BD;
+--primaria-hover: #01579B;
+--cor-destaque: #D84315;
+--destaque-hover: #BF360C;
+--cor-sucesso: #2E7D32;
+--fundo-alerta: #FFF8E1;
+--borda-alerta: #FFA000;
+--cor-borda: #CFD8DC;
+--contorno-foco: #FFD600;
+
+/* Unidades relativas para redimensionamento acessível */
+--tamanho-fonte-base: 1.15rem; /* ~18px a 19px */
+--titulo-1: 2em;
+--titulo-2: 1.5em;
+--titulo-3: 1.2em;
+
+--raio-borda: 16px;
+--sombra: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+
+}
+
+/* ==========================================================================
+2. REGRAS DE ACESSIBILIDADE (ALTO CONTRASTE E FONTE AMPLIADA)
+========================================================================== /
+/ Tema de Alto Contraste */
+#contrast-toggle:checked ~ .envoltorio-app {
+--cor-fundo: #000000;
+--fundo-cartao: #121212;
+--cor-texto: #FFFFFF;
+--texto-suave: #E0E0E0;
+--cor-primaria: #FFD600;
+--primaria-hover: #FFF176;
+--cor-destaque: #FF5252;
+--destaque-hover: #FF8A80;
+--cor-sucesso: #00E676;
+--fundo-alerta: #261C00;
+--borda-alerta: #FFD600;
+--cor-borda: #FFFFFF;
+--contorno-foco: #00E5FF;
+}
+
+/* Ampliação de Fonte para Leitura Confortável /
+#font-toggle:checked ~ .envoltorio-app {
+--tamanho-fonte-base: 1.55rem; / ~24px a 25px */
+
+
+/* ==========================================================================
+3. ESTILOS BASE E RESET DE ELEMENTOS
+========================================================================== */
+
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+}
+
+body {
+font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+background-color: var(--cor-fundo);
+color: var(--cor-texto);
+line-height: 1.6;
+transition: background-color 0.3s, color 0.3s;
+}
+
+/* Esconde os checkboxes de controle sem remover do leitor de tela */
+.alternador-estado {
+position: absolute;
+opacity: 0;
+pointer-events: none;
+width: 0;
+height: 0;
+}
+
+.envoltorio-app {
+max-width: 1000px;
+margin: 0 auto;
+padding: 20px;
+background-color: var(--cor-fundo);
+min-height: 100vh;
+font-size: var(--tamanho-fonte-base);
+transition: font-size 0.2s ease, background-color 0.3s;
+}
+
+/* ==========================================================================
+4. BARRA DE ACESSIBILIDADE FIXA
+========================================================================== */
+.barra-acessibilidade {
+background-color: #1A252C;
+color: #FFFFFF;
+padding: 12px 20px;
+display: flex;
+flex-wrap: wrap;
+justify-content: space-between;
+align-items: center;
+gap: 15px;
+position: sticky;
+top: 0;
+z-index: 1000;
+box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.titulo-acessibilidade {
+font-size: 1em;
+font-weight: bold;
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.botoes-acessibilidade {
+display: flex;
+gap: 12px;
+flex-wrap: wrap;
+}
+
+.botao-acesso {
+display: inline-flex;
+align-items: center;
+gap: 8px;
+background-color: #37474F;
+color: #FFFFFF;
+padding: 10px 18px;
+border-radius: 30px;
+font-weight: bold;
+font-size: 0.95em;
+cursor: pointer;
+border: 2px solid transparent;
+user-select: none;
+transition: all 0.2s ease;
+}
+
+.botao-acesso:hover {
+background-color: #455A64;
+}
+
+.botao-acesso:focus-within,
+button:focus-visible,
+a:focus-visible,
+label:focus-visible {
+outline: 4px solid var(--contorno-foco);
+outline-offset: 3px;
+}
+
+#contrast-toggle:checked ~ .envoltorio-app .rotulo-botao-contraste {
+background-color: #FFD600;
+color: #000000;
+}
+
+#font-toggle:checked ~ .envoltorio-app .rotulo-botao-fonte {
+background-color: #00E676;
+color: #000000;
+}
+
+/* ==========================================================================
+5. NAVEGAÇÃO POR ABAS (SEM JAVASCRIPT)
+========================================================================== */
+.navegacao-abas {
+display: flex;
+gap: 10px;
+margin-bottom: 25px;
+overflow-x: auto;
+padding-bottom: 5px;
+}
+
+.botao-aba {
+flex: 1;
+min-width: 150px;
+padding: 16px 10px;
+background-color: var(--fundo-cartao);
+color: var(--cor-texto);
+border: 3px solid var(--cor-borda);
+border-radius: var(--raio-borda);
+font-size: 0.95em;
+font-weight: bold;
+text-align: center;
+cursor: pointer;
+transition: all 0.2s ease;
+user-select: none;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 6px;
+}
+
+.botao-aba span.icone {
+font-size: 1.4em;
+}
+
+.botao-aba:hover {
+border-color: var(--cor-primaria);
+background-color: rgba(2, 119, 189, 0.05);
+}
+
+/* Destaque da Aba Ativa */
+#tab-inicio:checked ~ .envoltorio-app label[for="tab-inicio"],
+#tab-dicas:checked ~ .envoltorio-app label[for="tab-dicas"],
+#tab-direitos:checked ~ .envoltorio-app label[for="tab-direitos"],
+#tab-golpes:checked ~ .envoltorio-app label[for="tab-golpes"],
+#tab-ajuda:checked ~ .envoltorio-app label[for="tab-ajuda"] {
+background-color: var(--cor-primaria);
+color: #FFFFFF;
+border-color: var(--cor-primaria);
+transform: translateY(-2px);
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Exibição Alternada das Seções */
+.conteudo-aba {
+display: none;
+animation: surgir 0.3s ease-in-out;
+}
+
+@keyframes surgir {
+from {
+opacity: 0;
+transform: translateY(8px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+#tab-inicio:checked ~ .envoltorio-app #content-inicio,
+#tab-dicas:checked ~ .envoltorio-app #content-dicas,
+#tab-direitos:checked ~ .envoltorio-app #content-direitos,
+#tab-golpes:checked ~ .envoltorio-app #content-golpes,
+#tab-ajuda:checked ~ .envoltorio-app #content-ajuda {
+display: block;
+}
+
+/* ==========================================================================
+6. BANNER PRINCIPAL E BOTÕES DE AÇÃO
+========================================================================== */
+.banner-principal {
+background-color: var(--fundo-cartao);
+border: 3px solid var(--cor-borda);
+border-radius: var(--raio-borda);
+padding: 35px 25px;
+text-align: center;
+box-shadow: var(--sombra);
+margin-bottom: 25px;
+}
+
+.banner-principal h1 {
+font-size: var(--titulo-1);
+color: var(--cor-primaria);
+margin-bottom: 12px;
+line-height: 1.2;
+}
+
+.banner-principal p {
+color: var(--texto-suave);
+font-size: 1.15em;
+max-width: 750px;
+margin: 0 auto 25px auto;
+}
+
+.acoes-banner {
+display: flex;
+justify-content: center;
+gap: 15px;
+flex-wrap: wrap;
+}
+
+.botao-emergencia {
+display: inline-flex;
+align-items: center;
+gap: 10px;
+background-color: var(--cor-destaque);
+color: #FFFFFF;
+font-size: 1.1em;
+font-weight: bold;
+padding: 16px 28px;
+border-radius: 40px;
+border: 3px solid transparent;
+cursor: pointer;
+box-shadow: 0 4px 10px rgba(216, 67, 21, 0.3);
+transition: all 0.2s ease;
+user-select: none;
+}
+
+.botao-emergencia:hover {
+background-color: var(--destaque-hover);
+transform: scale(1.03);
+}
+
+.botao-secundario {
+display: inline-flex;
+align-items: center;
+gap: 10px;
+background-color: var(--cor-primaria);
+color: #FFFFFF;
+font-size: 1.05em;
+font-weight: bold;
+padding: 16px 24px;
+border-radius: 40px;
+cursor: pointer;
+transition: all 0.2s ease;
+user-select: none;
+}
+
+.botao-secundario:hover {
+background-color: var(--primaria-hover);
+}
+
+/* ==========================================================================
+7. CARTÕES, GRADES E ALERTAS
+========================================================================== */
+.grade-cartoes {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+gap: 20px;
+}
+
+.cartao {
+background-color: var(--fundo-cartao);
+border: 2px solid var(--cor-borda);
+border-radius: var(--raio-borda);
+padding: 24px;
+box-shadow: var(--sombra);
+display: flex;
+flex-direction: column;
+gap: 12px;
+}
+
+.numero-cartao {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+width: 45px;
+height: 45px;
+background-color: var(--cor-primaria);
+color: #FFFFFF;
+font-weight: bold;
+font-size: 1.2em;
+border-radius: 50%;
+}
+
+.cartao h2,
+.cartao h3 {
+color: var(--cor-primaria);
+font-size: var(--titulo-2);
+}
+
+.etiqueta-alerta {
+display: inline-block;
+background-color: var(--fundo-alerta);
+color: var(--cor-texto);
+border: 2px solid var(--borda-alerta);
+font-weight: bold;
+padding: 6px 14px;
+border-radius: 20px;
+font-size: 0.85em;
+align-self: flex-start;
+}
+
+/* ==========================================================================
+8. CAIXA DE DIREITOS E PAINEL DE EMERGÊNCIA
+========================================================================== */
+.caixa-direitos {
+background-color: var(--fundo-cartao);
+border: 3px solid var(--cor-borda);
+border-radius: var(--raio-borda);
+padding: 30px;
+box-shadow: var(--sombra);
+margin-bottom: 20px;
+}
+
+.item-direito {
+margin-bottom: 20px;
+padding-bottom: 20px;
+border-bottom: 2px dashed var(--cor-borda);
+}
+
+.item-direito:last-child {
+border-bottom: none;
+margin-bottom: 0;
+padding-bottom: 0;
+}
+
+.item-direito h3 {
+color: var(--cor-primaria);
+font-size: var(--titulo-3);
+margin-bottom: 8px;
+display: flex;
+align-items: center;
+gap: 10px;
+}
+
+.caixa-emergencia {
+background-color: #FFF3E0;
+border: 4px solid var(--cor-destaque);
+border-radius: var(--raio-borda);
+padding: 25px;
+margin-bottom: 25px;
+}
+
+#contrast-toggle:checked ~ .envoltorio-app .caixa-emergencia {
+background-color: #1A1000;
+border-color: #FF5252;
+}
+
+.caixa-emergencia h2 {
+color: var(--cor-destaque);
+font-size: var(--titulo-1);
+margin-bottom: 12px;
+}
+
+.lista-passos {
+list-style: none;
+counter-reset: contador-passos;
+margin-top: 15px;
+}
+
+.lista-passos li {
+counter-increment: contador-passos;
+position: relative;
+padding-left: 55px;
+margin-bottom: 20px;
+font-size: 1.05em;
+}
+
+.lista-passos li::before {
+content: counter(contador-passos);
+position: absolute;
+left: 0;
+top: 0;
+width: 40px;
+height: 40px;
+background-color: var(--cor-destaque);
+color: #FFFFFF;
+font-weight: bold;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 1.2rem;
+}
+
+footer {
+text-align: center;
+padding: 30px 10px;
+margin-top: 40px;
+border-top: 2px solid var(--cor-borda);
+color: var(--texto-suave);
+}
+
+/* ==========================================================================
+9. RESPONSIVIDADE E DISPOSITIVOS MÓVEIS
+========================================================================== */
+@media (max-width: 600px) {
+.barra-acessibilidade {
+flex-direction: column;
+align-items: stretch;
+}
+.botoes-acessibilidade {
+justify-content: space-between;
+}
+.botao-acesso {
+flex: 1;
+justify-content: center;
+}
+.navegacao-abas {
+flex-wrap: nowrap;
+}
+.botao-aba {
+min-width: 120px;
+padding: 12px 6px;
+font-size: 0.85em;
+}
+.banner-principal {
+padding: 20px 15px;
+}
+.botao-emergencia,
+.botao-secundario {
+width: 100%;
+justify-content: center;
+}
+}

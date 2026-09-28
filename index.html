@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Amigo: Segurança Digital para Idosos</title>
+    <style>
+        :root {
+            --cor-fundo: #F4F7F6;
+            --fundo-cartao: #FFFFFF;
+            --cor-texto: #1A252C;
+            --texto-suave: #4A5568;
+            --cor-primaria: #0277BD;
+            --primaria-hover: #01579B;
+            --cor-destaque: #D84315;
+            --destaque-hover: #BF360C;
+            --cor-sucesso: #2E7D32;
+            --fundo-alerta: #FFF8E1;
+            --borda-alerta: #FFA000;
+            --cor-borda: #CFD8DC;
+            --contorno-foco: #FFD600;
+            
+            --tamanho-fonte-base: 19px;
+            --titulo-1: 2em;
+            --titulo-2: 1.5em;
+            --titulo-3: 1.2em;
+            
+            --raio-borda: 16px;
+            --sombra: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        #contrast-toggle:checked ~ .envoltorio-app {
+            --cor-fundo: #000000;
+            --fundo-cartao: #121212;
+            --cor-texto: #FFFFFF;
+            --texto-suave: #E0E0E0;
+            --cor-primaria: #FFD600;
+            --primaria-hover: #FFF176;
+            --cor-destaque: #FF5252;
+            --destaque-hover: #FF8A80;
+            --cor-sucesso: #00E676;
+            --fundo-alerta: #261C00;
+            --borda-alerta: #FFD600;
+            --cor-borda: #FFFFFF;
+            --contorno-foco: #00E5FF;
+        }
+
+        #font-toggle:checked ~ .envoltorio-app {
+            --tamanho-fonte-base: 25px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .alternador-estado {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+            width: 0;
+            height: 0;
+        }
+
+        .barra-acessibilidade {
+            background-color: #1A252C;
+            color: #FFFFFF;
+            padding: 12px 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .titulo-acessibilidade {
+            font-size: 1em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .botoes-acessibilidade {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .botao-acesso {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #37474F;
+            color: #FFFFFF;
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 0.95em;
+            cursor: pointer;
+            border: 2px solid transparent;
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+
+        .botao-acesso:hover {
+            background-color: #455A64;
+        }
+
+        .botao-acesso:focus-within,
+        button:focus-visible,
+        a:focus-visible,
+        label:focus-visible {
+            outline: 4px solid var(--contorno-foco);
+            outline-offset: 3px;
+        }
+
+        #contrast-toggle:checked ~ .envoltorio-app .rotulo-botao-contraste {
+            background-color: #FFD600;
+            color: #000000;
+        }
+
+        #font-toggle:checked ~ .envoltorio-app .rotulo-botao-fonte {
+            background-color: #00E676;
+            color: #000000;
+        }
+
+        .envoltorio-app {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--cor-fundo);
+            min-height: 100vh;
+            font-size: var(--tamanho-fonte-base);
+            transition: font-size 0.2s ease;
+        }
+
+        .navegacao-abas {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .botao-aba {
+            flex: 1;
+            min-width: 160px;
+            padding: 16px 12px;
+            background-color: var(--fundo-cartao);
+            color: var(--cor-texto);
+            border: 3px solid var(--cor-borda);
+            border-radius: var(--raio-borda);
+            font-size: 1em;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .botao-aba span.icone {
+            font-size: 1.5em;
+        }
+
+        .botao-aba:hover {
+            border-color: var(--cor-primaria);
+            background-color: rgba(2, 119, 189, 0.05);
+        }
+
+        #tab-inicio:checked ~ .envoltorio-app label[for="tab-inicio"],
+        #tab-dicas:checked ~ .envoltorio-app label[for="tab-dicas"],
+        #tab-direitos:checked ~ .envoltorio-app label[for="tab-direitos"],
+        #tab-golpes:checked ~ .envoltorio-app label[for="tab-golpes"],
+        #tab-ajuda:checked ~ .envoltorio-app label[for="tab-ajuda"] {
+            background-color: var(--cor-primaria);
+            color: #FFFFFF;
+            border-color: var(--cor-primaria);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .conteudo-aba {
+            display: none;
+            animation: surgir 0.3s ease-in-out;
+        }
+
+        @keyframes surgir {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #tab-inicio:checked ~ .envoltorio-app #content-inicio,
+        #tab-dicas:checked ~ .envoltorio-app #content-dicas,
+        #tab-direitos:checked ~ .envoltorio-app #content-direitos,
+        #tab-golpes:checked ~ .envoltorio-app #content-golpes,
+        #tab-ajuda:checked ~ .envoltorio-app #content-ajuda {
+            display: block;
+        }
+
+        .banner-principal {
+            background-color: var(--fundo-cartao);
+            border: 3px solid var(--cor-borda);
+            border-radius: var(--raio-borda);
+            padding: 35px 25px;
+            text-align: center;
+            box-shadow: var(--sombra);
+            margin-bottom: 25px;
+        }
+
+        .banner-principal h1 {
+            font-size: var(--titulo-1);
+            color: var(--cor-primaria);
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .banner-principal p {
+            color: var(--texto-suave);
+            font-size: 1.15em;
+            max-width: 750px;
+            margin: 0 auto 25px auto;
+        }
+
+        .acoes-banner {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .botao-emergencia {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--cor-destaque);
+            color: #FFFFFF;
+            font-size: 1.1em;
+            font-weight: bold;
+            padding: 16px 28px;
+            border-radius: 40px;
+            border: 3px solid transparent;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(216, 67, 21, 0.3);
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .botao-emergencia:hover {
+            background-color: var(--destaque-hover);
+            transform: scale(1.03);
+        }
+
+        .botao-secundario {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--cor-primaria);
+            color: #FFFFFF;
+            font-size: 1.05em;
+            font-weight: bold;
+            padding: 16px 24px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .botao-secundario:hover {
+            background-color: var(--primaria-hover);
+        }
+
+        .grade-cartoes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .cartao {
+            background-color: var(--fundo-cartao);
+            border: 2px solid var(--cor-borda);
+            border-radius: var(--raio-borda);
+            padding: 24px;
+            box-shadow: var(--sombra);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .numero-cartao {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background-color: var(--cor-primaria);
+            color: #FFFFFF;
+            font-weight: bold;
+            font-size: 1.2em;
+            border-radius: 50%;
+        }
+
+        .cartao h2, .cartao h3 {
+            color: var(--cor-primaria);
+            font-size: var(--titulo-2);
+        }
+
+        .etiqueta-alerta {
+            display: inline-block;
+            background-color: var(--fundo-alerta);
+            color: var(--cor-texto);
+            border: 2px solid var(--borda-alerta);
+            font-weight: bold;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            align-self: flex-start;
+        }
+
+        .caixa-direitos {
+            background-color: var(--fundo-cartao);
+            border: 3px solid var(--cor-borda);
+            border-radius: var(--raio-borda);
+            padding: 30px;
+            box-shadow: var(--sombra);
+            margin-bottom: 20px;
+        }
+
+        .item-direito {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px dashed var(--cor-borda);
+        }
+
+        .item-direito:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .item-direito h3 {
+            color: var(--cor-primaria);
+            font-size: var(--titulo-3);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .caixa-emergencia {
+            background-color: #FFF3E0;
+            border: 4px solid var(--cor-destaque);
+            border-radius: var(--raio-borda);
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        #contrast-toggle:checked ~ .envoltorio-app .caixa-emergencia {
+            background-color: #1A1000;
+            border-color: #FF5252;
+        }
+
+        .caixa-emergencia h2 {
+            color: var(--cor-destaque);
+            font-size: var(--titulo-1);
+            margin-bottom: 12px;
+        }
+
+        .lista-passos {
+            list-style: none;
+            counter-reset: contador-passos;
+            margin-top: 15px;
+        }
+
+        .lista-passos li {
+            counter-increment: contador-passos;
+            position: relative;
+            padding-left: 55px;
+            margin-bottom: 20px;
+            font-size: 1.05em;
+        }
+
+        .lista-passos li::before {
+            content: counter(contador-passos);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 40px;
+            height: 40px;
+            background-color: var(--cor-destaque);
+            color: #FFFFFF;
+            font-weight: bold;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1em;
+        }
+
+        .lista-passos li::before {
+            content: counter(contador-passos);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 40px;
+            height: 40px;
+            background-color: var(--cor-destaque);
+            color: #FFFFFF;
+            font-weight: bold;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 10px;
+            margin-top: 40px;
+            border-top: 2px solid var(--cor-borda);
+            color: var(--texto-suave);
+        }
+
+        @media (max-width: 600px) {
+            .barra-acessibilidade {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .botoes-acessibilidade {
+                justify-content: space-between;
+            }
+            .botao-acesso {
+                flex: 1;
+                justify-content: center;
+            }
+            .navegacao-abas {
+                flex-wrap: nowrap;
+            }
+            .botao-aba {
+                min-width: 120px;
+                padding: 12px 6px;
+                font-size: 0.9rem;
+            }
+            .banner-principal {
+                padding: 20px 15px;
+            }
+            .botao-emergencia, .botao-secundario {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Alternadores Globais de Acessibilidade -->
+    <input type="checkbox" id="contrast-toggle" class="alternador-estado" aria-label="Alternar Alto Contraste">
+    <input type="checkbox" id="font-toggle" class="alternador-estado" aria-label="Aumentar Tamanho da Fonte">
+
+    <!-- Alternadores das Abas de Navegação -->
+    <input type="radio" name="main-tabs" id="tab-inicio" class="alternador-estado" checked>
+    <input type="radio" name="main-tabs" id="tab-dicas" class="alternador-estado">
+    <input type="radio" name="main-tabs" id="tab-direitos" class="alternador-estado">
+    <input type="radio" name="main-tabs" id="tab-golpes" class="alternador-estado">
+    <input type="radio" name="main-tabs" id="tab-ajuda" class="alternador-estado">
+
+    <div class="envoltorio-app">
+
+        <!-- Barra de Acessibilidade Fixa no Topo -->
+        <div class="barra-acessibilidade" role="region" aria-label="Ferramentas de Acessibilidade">
+            <div class="titulo-acessibilidade">
+                <span>👁️ Opções de Leitura:</span>
+            </div>
+            <div class="botoes-acessibilidade">
+                <label for="font-toggle" class="botao-acesso rotulo-botao-fonte" tabindex="0" role="button">
+                    <span>🔍</span> Letras Maiores
+                </label>
+                <label for="contrast-toggle" class="botao-acesso rotulo-botao-contraste" tabindex="0" role="button">
+                    <span>☯️</span> Alto Contraste
+                </label>
+            </div>
+        </div>
+
+        <nav class="navegacao-abas" aria-label="Navegação do Aplicativo" style="margin-top: 15px;">
+            <label for="tab-inicio" class="botao-aba" tabindex="0" role="button">
+                <span class="icone">🏠</span>
+                <span>Início</span>
+            </label>
+            <label for="tab-dicas" class="botao-aba" tabindex="0" role="button">
+                <span class="icone">💡</span>
+                <span>3 Dicas</span>
+            </label>
+            <label for="tab-direitos" class="botao-aba" tabindex="0" role="button">
+                <span class="icone">⚖️</span>
+                <span>Seus Direitos</span>
+            </label>
+            <label for="tab-golpes" class="botao-aba" tabindex="0" role="button">
+                <span class="icone">🛑</span>
+                <span>Sinais de Golpe</span>
+            </label>
+            <label for="tab-ajuda" class="botao-aba" tabindex="0" role="button">
+                <span class="icone">🆘</span>
+                <span>Ajuda Urgente</span>
+            </label>
+        </nav>
+
+        <main id="main-content">
+            
+            <section id="content-inicio" class="conteudo-aba">
+                <div class="banner-principal">
+                    <h1>Sua Segurança Digital em Primeiro Lugar</h1>
+                    <p>Um guia fácil, direto e acolhedor para você usar a internet e o celular com total tranquilidade e proteção.</p>
+                    
+                    <div class="acoes-banner">
+                        <label for="tab-ajuda" class="botao-emergencia botao-fechar" tabindex="0" role="button">
+                            <span>🆘</span> Preciso de Ajuda Agora!
+                        </label>
+                        <label for="tab-dicas" class="botao-secundario" tabindex="0" role="button">
+                            <span>📖</span> Ver Dicas Rápidas
+                        </label>
+                    </div>
+                </div>
+
+                <div class="grade-cartoes">
+                    <article class="cartao" style="text-align: center; align-items: center;">
+                        <div style="font-size: 2.8rem;">📱</div>
+                        <h3>Celular Seguro</h3>
+                        <p>Aprenda a proteger seus aplicativos de banco e suas mensagens de texto.</p>
+                    </article>
+
+                    <article class="cartao" style="text-align: center; align-items: center;">
+                        <div style="font-size: 2.8rem;">🛡️</div>
+                        <h3>Conheça Seus Direitos</h3>
+                        <p>A lei garante a sua privacidade e segurança nas redes sociais e na internet.</p>
+                    </article>
+
+                    <article class="cartao" style="text-align: center; align-items: center;">
+                        <div style="font-size: 2.8rem;">🤝</div>
+                        <h3>Navegue sem Medo</h3>
+                        <p>Reconheça mensagens falsas e saiba exatamente como reagir se desconfiar.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section id="content-dicas" class="conteudo-aba">
+                <h2 style="margin-bottom: 20px; text-align: center; color: var(--cor-primaria);">3 Dicas Simples para se Proteger</h2>
+                
+                <div class="grade-cartoes">
+                    <article class="cartao">
+                        <div class="numero-cartao">1</div>
+                        <h3>Confirme por Voz antes de Transferir</h3>
+                        <p>Se um parente ou amigo pedir dinheiro pelo WhatsApp (mesmo usando a foto dele), <strong>não faça o envio imediato</strong>. Ligue para o número tradicional que você já tem guardado e fale com ele por voz.</p>
+                    </article>
+
+                    <article class="cartao">
+                        <div class="numero-cartao">2</div>
+                        <h3>Senhas São Secretas</h3>
+                        <p>O seu banco ou o governo <strong>nunca ligam pedindo a sua senha</strong> ou código do celular. Se alguém pedir sua senha pelo telefone, desligue na mesma hora.</p>
+                    </article>
+
+                    <article class="cartao">
+                        <div class="numero-cartao">3</div>
+                        <h3>Não Clique em Links Estranhos</h3>
+                        <p>Recebeu uma mensagem de SMS ou WhatsApp dizendo que sua conta foi bloqueada ou que ganhou um prêmio? <strong>Não clique no link</strong>. Apague a mensagem.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section id="content-direitos" class="conteudo-aba">
+                <h2 style="margin-bottom: 20px; text-align: center; color: var(--cor-primaria);">Seus Direitos na Internet</h2>
+                
+                <div class="caixa-direitos">
+                    <div class="item-direito">
+                        <h3>🔒 Direito à Privacidade e Proteção de Dados (LGPD)</h3>
+                        <p>Nenhuma empresa ou site pode vender, compartilhar ou usar suas informações pessoais (como CPF, endereço e número de telefone) sem a sua autorização explícita.</p>
+                    </div>
+
+                    <div class="item-direito">
+                        <h3>🏦 Responsabilidade dos Bancos em Caso de Fraude</h3>
+                        <p>O Código de Defesa do Consumidor garante que os bancos devem oferecer sistemas seguros. Se houver falhas de segurança no banco que permitam transações suspeitas, a instituição financeira é responsável por investigar e restituir os valores.</p>
+                    </div>
+
+                    <div class="item-direito">
+                        <h3>🤝 Direito ao Atendimento Acessível e Humano</h3>
+                        <p>Pessoas idosas têm direito a atendimento prioritário e compreensível nas instituições financeiras e órgãos públicos, tanto presenciais quanto digitais.</p>
+                    </div>
+
+                    <div class="item-direito">
+                        <h3>📑 Direito de Cancelar Compras Feitas pela Internet</h3>
+                        <p>Comprou algo pela internet ou pelo telefone e se arrependeu? Você tem até <strong>7 dias</strong> após o recebimento para cancelar e receber todo o seu dinheiro de volta (Direito de Arrependimento).</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="content-golpes" class="conteudo-aba">
+                <h2 style="margin-bottom: 10px; text-align: center; color: var(--cor-primaria);">Como Saber se Estou Caindo em um Golpe?</h2>
+                <p style="text-align: center; margin-bottom: 25px; color: var(--texto-suave);">Fique atento a estas 4 atitudes suspeitas:</p>
+
+                <div class="grade-cartoes">
+                    <article class="cartao">
+                        <span class="etiqueta-alerta">⚠️ Atitude Suspeita 1</span>
+                        <h3>Urgência Excessiva</h3>
+                        <p>O golpista tenta te assustar com frases como: <em>"Sua conta será bloqueada hoje!"</em> ou <em>"Preciso do dinheiro em 5 minutos!"</em>.</p>
+                        <p><strong>Por que é golpe?</strong> Eles criam pressa para você não ter tempo de pensar ou consultar sua família.</p>
+                    </article>
+
+                    <article class="cartao">
+                        <span class="etiqueta-alerta">⚠️ Atitude Suspeita 2</span>
+                        <h3>Pedido para Baixar Aplicativos</h3>
+                        <p>Alguém liga dizendo ser do banco ou do suporte e pede para você instalar um aplicativo no celular para "proteger" ou "limpar" sua conta.</p>
+                        <p><strong>Por que é golpe?</strong> Esse aplicativo permite que o criminoso mexa no seu celular à distância.</p>
+                    </article>
+
+                    <article class="cartao">
+                        <span class="etiqueta-alerta">⚠️ Atitude Suspeita 3</span>
+                        <h3>Mudança de Número do Parente</h3>
+                        <p>Uma mensagem diz: <em>"Oi mãe, troquei de número, me manda um PIX para pagar uma conta urgente"</em>.</p>
+                        <p><strong>Por que é golpe?</strong> Criminosos usam fotos públicas para se fingirem de familiares.</p>
+                    </article>
+
+                    <article class="cartao">
+                        <span class="etiqueta-alerta">⚠️ Atitude Suspeita 4</span>
+                        <h3>Prêmios ou Dinheiro Inesperado</h3>
+                        <p>Mensagens informando que você ganhou um prêmio, mas que precisa pagar uma "taxa de liberação" antes.</p>
+                        <p><strong>Por que é golpe?</strong> Nenhum prêmio verdadeiro exige que você pague dinheiro para receber.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section id="content-ajuda" class="conteudo-aba">
+                <div class="caixa-emergencia">
+                    <h2>🆘 O que fazer se suspeitar de golpe ou perda de dinheiro:</h2>
+                    <p>Siga estas orientações simples com calma e o mais rápido possível:</p>
+                    
+                    <ol class="lista-passos">
+                        <li>
+                            <strong>Ligue para o seu Banco:</strong> Use o número que está impresso no verso do seu cartão bancário e peça o bloqueio imediato do cartão e do PIX.
+                        </li>
+                        <li>
+                            <strong>Avise sua Família:</strong> Conte para um filho, neto ou pessoa de confiança sobre o ocorrido para que te ajudem a verificar seu celular.
+                        </li>
+                        <li>
+                            <strong>Faça um Boletim de Ocorrência (B.O.):</strong> Vá até uma Delegacia da Polícia Civil ou peça ajuda a um familiar para registrar o B.O. pela internet.
+                        </li>
+                    </ol>
+                </div>
+
+                <div class="cartao" style="background-color: var(--fundo-cartao);">
+                    <h3>Telefones Úteis:</h3>
+                    <p style="margin-top: 10px;"><strong>🚨 Polícia Militar:</strong> Ligue 190</p>
+                    <p><strong>🛡️ Disque Denúncia:</strong> Ligue 181</p>
+                    <p><strong>📞 Seu Banco:</strong> Verifique sempre o telefone no verso do seu cartão impresso.</p>
+                </div>
+            </section>
+
+        </main>
+
+        <footer role="contentinfo">
+            <p><strong>Guia Amigo de Segurança Digital</strong> - Feito especialmente para garantir a sua tranquilidade e proteção na internet.</p>
+        </footer>
+
+        <script src="script.js"></script>
+    </div>
+</body>
+</html>
